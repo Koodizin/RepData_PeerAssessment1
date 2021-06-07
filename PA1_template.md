@@ -7,7 +7,8 @@ output:
 
 
 ## Loading and preprocessing the data
-```{r}
+
+```r
 # Load the project data
 
 unzip("activity.zip")
@@ -34,10 +35,10 @@ project_dt <- data.frame(date=project$date,
                        daytype=project$daytype, 
                        interval=project$interval,
                        steps=project$steps)
-
 ```
 ## What is mean total number of steps taken per day?
-```{r}
+
+```r
 # Generating the number of steps each day (NA values removed)
 sum_data <- aggregate(project_dt$steps, by=list(project_dt$date), FUN=sum, na.rm=TRUE)
 
@@ -51,15 +52,29 @@ hist(sum_data$total,
      xlab="Total number of steps", 
      ylim=c(0, 20), 
      main="Histogram of the total number of steps taken each day\n(NA removed)")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+```r
 #Calculate and report the mean and median total number of steps taken per day
 mean(sum_data$total)
-median(sum_data$total)
+```
 
 ```
-## What is the average daily activity pattern?
-```{r}
+## [1] 9363.117
+```
 
+```r
+median(sum_data$total)
+```
+
+```
+## [1] 10417
+```
+## What is the average daily activity pattern?
+
+```r
 # Calculating the means of steps across all days for each interval
 mean_data <- aggregate(project_dt$steps, 
                        by=list(project_dt$interval), 
@@ -78,7 +93,11 @@ plot(mean_data$interval,
      xlab="Interval [minutes]", 
      ylab="Average number of steps", 
      main="Time-series of the average number of steps per intervals\n(NA removed)")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+```r
 #Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 # We find the position of the maximum mean
@@ -88,8 +107,13 @@ max_pos <- which(mean_data$mean == max(mean_data$mean))
 max_interval <- mean_data[max_pos, 1]
 max_interval
 ```
+
+```
+## [1] 835
+```
 ## Imputing missing values
-```{r}
+
+```r
 # We use the trick that a TRUE boolean value is equivalent to 1 and a FALSE to 0.
 NA_count <- sum(is.na(project_dt$steps))
 
@@ -120,9 +144,12 @@ hist(sum_data$total,
      main="Histogram of the total number of steps taken each day\n(NA replaced by mean value)")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+
+```r
 # Load the lattice graphical library
 library(lattice)
 
@@ -142,3 +169,5 @@ xyplot(mean ~ interval | daytype, mean_data,
        ylab="Number of steps", 
        layout=c(1,2))
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
